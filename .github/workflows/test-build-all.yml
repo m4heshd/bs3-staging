@@ -5,9 +5,9 @@ on:
 
 env:
   NODE_BUILD_CMD_LEGACY: npx --no-install prebuild -r node -t 22.0.0 -t 24.0.0 --include-regex 'better_sqlite3.node$'
-  NODE_BUILD_CMD_MODERN: npx --no-install prebuild -r node -t 25.0.0 -t 26.0.0 --include-regex 'better_sqlite3.node$'
+  NODE_BUILD_CMD_25_PLUS: npx --no-install prebuild -r node -t 25.0.0 -t 26.0.0 --include-regex 'better_sqlite3.node$'
   ELECTRON_BUILD_CMD_LEGACY: npx --no-install prebuild -r electron -t 29.0.0 -t 30.0.0 -t 31.0.0 -t 32.0.0 -t 33.0.0 -t 34.0.0 -t 35.0.0 -t 36.0.0 -t 37.0.0 -t 38.0.0 --include-regex 'better_sqlite3.node$'
-  ELECTRON_BUILD_CMD_MODERN: npx --no-install prebuild -r electron -t 39.0.0 -t 40.0.0 -t 41.0.0 -t 42.3.0 --include-regex 'better_sqlite3.node$'
+  ELECTRON_BUILD_CMD_39_PLUS: npx --no-install prebuild -r electron -t 39.0.0 -t 40.0.0 -t 41.0.0 -t 42.3.0 --include-regex 'better_sqlite3.node$'
   ELECTRON_BUILD_CMD_43_PLUS: npx --no-install prebuild -r electron -t 43.0.0 --include-regex 'better_sqlite3.node$'
 
 jobs:
@@ -32,19 +32,22 @@ jobs:
         run: brew install python-setuptools
       - run: npm install --ignore-scripts
       - run: ${{ env.NODE_BUILD_CMD_LEGACY }}
-      - run: ${{ env.NODE_BUILD_CMD_MODERN }}
+      - run: ${{ env.NODE_BUILD_CMD_25_PLUS }}
       - run: ${{ env.ELECTRON_BUILD_CMD_LEGACY }}
-      - run: ${{ env.ELECTRON_BUILD_CMD_MODERN }}
+      - run: ${{ env.ELECTRON_BUILD_CMD_39_PLUS }}
+      - run: ${{ env.ELECTRON_BUILD_CMD_43_PLUS }}
       - if: matrix.os == 'windows-2022'
         run: |
           ${{ env.NODE_BUILD_CMD_LEGACY }} --arch ia32
-          ${{ env.NODE_BUILD_CMD_MODERN }} --arch ia32
+          ${{ env.NODE_BUILD_CMD_25_PLUS }} --arch ia32
           ${{ env.NODE_BUILD_CMD_LEGACY }} --arch arm64
-          ${{ env.NODE_BUILD_CMD_MODERN }} --arch arm64
+          ${{ env.NODE_BUILD_CMD_25_PLUS }} --arch arm64
           ${{ env.ELECTRON_BUILD_CMD_LEGACY }} --arch ia32
-          ${{ env.ELECTRON_BUILD_CMD_MODERN }} --arch ia32
+          ${{ env.ELECTRON_BUILD_CMD_39_PLUS }} --arch ia32
+          ${{ env.ELECTRON_BUILD_CMD_43_PLUS }} --arch ia32
           ${{ env.ELECTRON_BUILD_CMD_LEGACY }} --arch arm64
-          ${{ env.ELECTRON_BUILD_CMD_MODERN }} --arch arm64
+          ${{ env.ELECTRON_BUILD_CMD_39_PLUS }} --arch arm64
+          ${{ env.ELECTRON_BUILD_CMD_43_PLUS }} --arch arm64
 
   prebuild-linux-x64:
     name: Prebuild on Linux x64
@@ -63,16 +66,16 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: npm install --ignore-scripts
-      - run: ${{ env.NODE_BUILD_CMD_MODERN }}
+      - run: ${{ env.NODE_BUILD_CMD_25_PLUS }}
 
-  prebuild-linux-x64-electron-modern:
+  prebuild-linux-x64-electron-39-plus:
     name: Prebuild on Linux x64 (Electron 39+)
     runs-on: ubuntu-latest
     container: node:20-bookworm
     steps:
       - uses: actions/checkout@v6
       - run: npm install --ignore-scripts
-      - run: ${{ env.ELECTRON_BUILD_CMD_MODERN }}
+      - run: ${{ env.ELECTRON_BUILD_CMD_39_PLUS }}
 
   prebuild-linux-x64-electron-43-plus:
     name: Prebuild on Linux x64 (Electron 43+)
@@ -92,7 +95,7 @@ jobs:
       - run: apk add build-base git python3 py3-setuptools --update-cache
       - run: npm install --ignore-scripts
       - run: ${{ env.NODE_BUILD_CMD_LEGACY }}
-      - run: ${{ env.NODE_BUILD_CMD_MODERN }}
+      - run: ${{ env.NODE_BUILD_CMD_25_PLUS }}
 
   prebuild-alpine-arm:
     strategy:
@@ -112,7 +115,7 @@ jobs:
           cd /tmp/project && \
           npm install --ignore-scripts && \
           ${{ env.NODE_BUILD_CMD_LEGACY }} && \
-          ${{ env.NODE_BUILD_CMD_MODERN }}"
+          ${{ env.NODE_BUILD_CMD_25_PLUS }}"
 
   prebuild-linux-arm:
     strategy:
@@ -149,9 +152,9 @@ jobs:
           docker run --rm -v $(pwd):/tmp/project --entrypoint /bin/sh --platform linux/${{ matrix.arch }} node:20-bookworm -c "\
           cd /tmp/project && \
           npm install --ignore-scripts && \
-          ${{ env.NODE_BUILD_CMD_MODERN }}"
+          ${{ env.NODE_BUILD_CMD_25_PLUS }}"
 
-  prebuild-linux-arm64-electron-modern:
+  prebuild-linux-arm64-electron-39-plus:
     name: Prebuild on Linux arm64 (Electron 39+)
     runs-on: ubuntu-latest
     steps:
@@ -161,7 +164,7 @@ jobs:
           docker run --rm -v $(pwd):/tmp/project --entrypoint /bin/sh --platform linux/arm64 node:20-bookworm -c "\
           cd /tmp/project && \
           npm install --ignore-scripts && \
-          ${{ env.ELECTRON_BUILD_CMD_MODERN }} --arch arm64"
+          ${{ env.ELECTRON_BUILD_CMD_39_PLUS }} --arch arm64"
 
   prebuild-linux-arm64-electron-43-plus:
     name: Prebuild on Linux arm64 (Electron 43+)
