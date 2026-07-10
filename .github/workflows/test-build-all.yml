@@ -75,7 +75,6 @@ jobs:
       - run: ${{ env.ELECTRON_BUILD_CMD_MODERN }}
 
   prebuild-linux-x64-electron-43-plus:
-    if: ${{ github.event_name == 'release' }}
     name: Prebuild on Linux x64 (Electron 43+)
     runs-on: ubuntu-latest
     container: node:20-trixie
@@ -165,7 +164,6 @@ jobs:
           ${{ env.ELECTRON_BUILD_CMD_MODERN }} --arch arm64"
 
   prebuild-linux-arm64-electron-43-plus:
-    if: ${{ github.event_name == 'release' }}
     name: Prebuild on Linux arm64 (Electron 43+)
     runs-on: ubuntu-latest
     steps:
