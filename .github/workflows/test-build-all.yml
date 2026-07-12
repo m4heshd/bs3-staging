@@ -20,6 +20,3 @@ jobs:
           apt-get install -y -t trixie gcc-12 g++-12
       - run: npm install --ignore-scripts
       - run: ${{ env.ELECTRON_BUILD_CMD_43_PLUS }}
-        env:
-          CC: gcc-13
-          CXX: g++-13
