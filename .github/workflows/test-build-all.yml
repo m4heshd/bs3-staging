@@ -4,7 +4,7 @@ on:
   workflow_dispatch: {}
 
 env:
-  ELECTRON_BUILD_CMD_43_PLUS: npx --no-install prebuild -r electron -t 43.0.0 --include-regex 'better_sqlite3.node$'
+  ELECTRON_BUILD_CMD_43_PLUS: npx --no-install prebuild -r electron -t 29.0.0 -t 30.0.0 -t 31.0.0 -t 32.0.0 -t 33.0.0 -t 34.0.0 -t 35.0.0 -t 36.0.0 -t 37.0.0 -t 38.0.0 -t 43.0.0 --include-regex 'better_sqlite3.node$'
 
 jobs:
 
@@ -15,9 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: |
-          echo "deb http://deb.debian.org/debian bookworm-backports main" >> /etc/apt/sources.list
+          echo "deb http://debian.org trixie main" >> /etc/apt/sources.list
           apt-get update
-          apt-get install -y -t bookworm-backports gcc-13 g++-13
+          apt-get install -y -t trixie gcc-12 g++-12
       - run: npm install --ignore-scripts
       - run: ${{ env.ELECTRON_BUILD_CMD_43_PLUS }}
         env:
